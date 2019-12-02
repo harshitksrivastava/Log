@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title_block %}Login{% endblock %}</title>
+  </head>
+  <body>
+    <h1> <strong>This is the login page</strong> </h1>
+    {% if error %}
+    {{error}}
+    {{username}}
+    {% endif %}
+    <form  method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

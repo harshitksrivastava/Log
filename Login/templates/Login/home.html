@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title_block %}homepage{% endblock %}</title>
+  </head>
+  <body>
+<h1> <strong> Welcome to the Ecommerce website </strong> </h1>
+  <a href="{% url 'signup' %}">Sign Up</a> <br>
+  {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
+  {% else %}
+  <a href="{% url 'login' %}">Login</a>
+  {% endif %}
+  </body>
+</html>

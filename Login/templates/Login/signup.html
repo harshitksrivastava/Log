@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title_block %}
+      Signup
+    {% endblock %}</title>
+  </head>
+  <body>
+    {% if error %}
+    {{error}}
+    <br>
+    <br>
+    {% endif %}
+    <form method="POST">
+        {{form.as_ul}}
+        {% csrf_token %}
+        <input type="Submit" value="Submit">
+    </form>
+  </body>
+</html>
