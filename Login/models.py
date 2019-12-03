@@ -6,13 +6,17 @@ from django.contrib.auth.models import PermissionsMixin
 # Create your models here.
 class ProfileManager(BaseUserManager):
 
-    def create_user(self,username,password,email,name):
+    def create_user(self,username,password,email,name,**extra_fields):
         if not username or not email or not name:
             raise ValueError('Username can not be null')
         normal_email = self.normalize_email(email)
         user = self.model(username=username,name=name,email=normal_email)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
         user.set_password(password)
         user.save(using=self.db)
+
+        return user
 
     def create_superuser(self,username,password,email,name):
         if not username or not email or not name:
@@ -23,6 +27,8 @@ class ProfileManager(BaseUserManager):
         user.is_staff = True
         user.set_password(password)
         user.save(using=self.db)
+
+        return user
 
 
 class Profile(AbstractBaseUser,PermissionsMixin):

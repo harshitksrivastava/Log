@@ -6,6 +6,11 @@ from django.views import View
 from . forms import NewUserForm,UserForm
 from . models import Profile
 from django.contrib import auth
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Profile
+from .serializers import ProfileSerializer
+from rest_framework import status
 
 # Create your views here.
 class HomePage(TemplateView):
@@ -66,3 +71,31 @@ class LogoutView(View):
     def get(self,request):
         auth.logout(request)
         return HttpResponseRedirect(reverse('homepage'))
+
+
+
+
+class ProfileList(APIView):
+    model = Profile
+
+    def get(self,request):
+        profile = self.model.objects.all()
+        serializer = ProfileSerializer(profile,many=True)
+        return Response(serializer.data)
+
+
+    def post(self,request):
+        serializer = ProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+    def put():
+        
+
+    # def patch():
+    #
+    #
+    # def delete():
