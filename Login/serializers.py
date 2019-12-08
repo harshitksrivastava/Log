@@ -8,6 +8,3 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         return Profile.objects.create_user(**validated_data)
-
-    def update(self,validated_data):
-        

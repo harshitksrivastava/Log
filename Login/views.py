@@ -1,5 +1,5 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render,redirect,get_object_or_404
+from django.http import HttpResponseRedirect,Http404
 from django.views.generic import TemplateView
 from django.urls import reverse
 from django.views import View
@@ -83,7 +83,6 @@ class ProfileList(APIView):
         serializer = ProfileSerializer(profile,many=True)
         return Response(serializer.data)
 
-
     def post(self,request):
         serializer = ProfileSerializer(data=request.data)
         if serializer.is_valid():
@@ -92,10 +91,24 @@ class ProfileList(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
-    def put():
-        
 
-    # def patch():
-    #
-    #
-    # def delete():
+class ProfileDetailView(APIView):
+    model = Profile
+
+    def get_object(self,pk):
+        try:
+            return self.model.objects.get(pk=pk)
+        except:
+            raise Http404
+
+    def get(self,request,pk):
+        profile =self.get_object(pk=pk)
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+
+    def patch(self,request,pk):
+        profile = get_object_or_404(self.model,pk=pk)
+        serializer = ProfileSerializer(profile,data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
